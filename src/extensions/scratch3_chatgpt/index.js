@@ -125,6 +125,9 @@ class Scratch3ChatGptBlocks {
             presence_penalty: 0,
         }).then(response => {
           return(response.data.choices[0].text);
+        }).catch(error => {
+          console.log(error);
+          return(`失敗しちゃったみたい。理由はこれだよ「${error}」`);
         });
       return completionPromise;
     }
