@@ -46,7 +46,7 @@ class Scratch3ChatGptBlocks {
     getInfo () {
         return {
             id: 'chatgpt',
-            name: 'ChatGpt Blocks',
+            name: 'ChatGPT',
             menuIconURI: menuIconURI,
             blockIconURI: blockIconURI,
             blocks: [
@@ -63,8 +63,8 @@ class Scratch3ChatGptBlocks {
                 },
                 {
                     opcode: 'ask',
-                    blockType: BlockType.COMMAND,
-                    text: '質問する [TEXT]',
+                    blockType: BlockType.REPORTER,
+                    text: 'ChatGPTに答えを聞く [TEXT]',
                     arguments: {
                         TEXT: {
                             type: ArgumentType.STRING,
@@ -79,7 +79,7 @@ class Scratch3ChatGptBlocks {
                     arguments: {
                         TEXT: {
                             type: ArgumentType.STRING,
-                            defaultValue: ''
+                            defaultValue: 'APIキー'
                         }
                     }
                 },
@@ -105,6 +105,9 @@ class Scratch3ChatGptBlocks {
     }
 
     ask (args){
+      if (this.apiKey === 'APIキー' || this.apiKey === ''){
+            return 'openai.com のサイトからAPIキーを取得してセットください';
+        }
         const question = Cast.toString(args.TEXT);
 
         const configuration = new Configuration({
@@ -112,7 +115,7 @@ class Scratch3ChatGptBlocks {
         });
         const openai = new OpenAIApi(configuration);
 
-        openai.createCompletion({
+        const completionPromise = openai.createCompletion({
             model: "text-davinci-003",
             prompt: question,
             temperature: 0,
@@ -121,8 +124,9 @@ class Scratch3ChatGptBlocks {
             frequency_penalty: 0,
             presence_penalty: 0,
         }).then(response => {
-          console.log(response.d.data.choices[0].text);
+          return(response.data.choices[0].text);
         });
+      return completionPromise;
     }
 
     setApiKey (args) {
