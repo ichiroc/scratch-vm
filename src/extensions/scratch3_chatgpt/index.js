@@ -1,7 +1,9 @@
+const { Configuration, OpenAIApi } = require('openai');
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
 const Cast = require('../../util/cast');
 const log = require('../../util/log');
+
 
 /**
  * Icon svg to be displayed at the left edge of each extension block, encoded as a data URI.
@@ -24,67 +26,117 @@ const menuIconURI = 'data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHdpZHRoP
  * @constructor
  */
 class Scratch3ChatGptBlocks {
-  constructor(runtime) {
+    apiKey = ''
+
+    constructor (runtime) {
     /**
      * The runtime instantiating this block package.
      * @type {Runtime}
      */
-    this.runtime = runtime;
+        this.runtime = runtime;
 
     // this._onTargetCreated = this._onTargetCreated.bind(this);
     // this.runtime.on('targetWasCreated', this._onTargetCreated);
-  }
+    }
 
 
-  /**
+    /**
 * @returns {object} metadata for this extension and its blocks.
 */
-  getInfo() {
-    return {
-      id: 'chatgpt',
-      name: 'ChatGpt Blocks',
-      menuIconURI: menuIconURI,
-      blockIconURI: blockIconURI,
-      blocks: [
-        {
-          opcode: 'writeLog',
-          blockType: BlockType.COMMAND,
-          text: 'log [TEXT]',
-          arguments: {
-            TEXT: {
-              type: ArgumentType.STRING,
-              defaultValue: 'hello'
+    getInfo () {
+        return {
+            id: 'chatgpt',
+            name: 'ChatGpt Blocks',
+            menuIconURI: menuIconURI,
+            blockIconURI: blockIconURI,
+            blocks: [
+                {
+                    opcode: 'writeLog',
+                    blockType: BlockType.COMMAND,
+                    text: 'log [TEXT]',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'hello'
+                        }
+                    }
+                },
+                {
+                    opcode: 'ask',
+                    blockType: BlockType.COMMAND,
+                    text: '質問する [TEXT]',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '君の名前は？'
+                        }
+                    }
+                },
+                {
+                    opcode: 'setApiKey',
+                    blockType: BlockType.COMMAND,
+                    text: 'APIキーをセット[TEXT]',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: ''
+                        }
+                    }
+                },
+                {
+                    opcode: 'getBrowser',
+                    text: 'browser',
+                    blockType: BlockType.REPORTER
+                }
+            ],
+            menus: {
             }
-          }
-        },
-        {
-          opcode: 'getBrowser',
-          text: 'browser',
-          blockType: BlockType.REPORTER
-        }
-      ],
-      menus: {
-      }
-    };
-  }
+        };
+    }
 
-  /**
+    /**
 * Write log.
 * @param {object} args - the block arguments.
 * @property {number} TEXT - the text.
 */
-  writeLog(args) {
-    const text = Cast.toString(args.TEXT);
-    log.log(text);
-  }
+    writeLog (args) {
+        const text = Cast.toString(args.TEXT);
+        log.log(this.apiKey);
+    }
 
-  /**
+    ask (args){
+        const question = Cast.toString(args.TEXT);
+
+        const configuration = new Configuration({
+            apiKey: this.apiKey
+        });
+        const openai = new OpenAIApi(configuration);
+
+        openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: question,
+            temperature: 0,
+            max_tokens: 1000,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        }).then(response => {
+          console.log(response.d.data.choices[0].text);
+        });
+    }
+
+    setApiKey (args) {
+        this.apiKey = Cast.toString(args.TEXT);
+    }
+
+
+    /**
 * Get the browser.
 * @return {number} - the user agent.
 */
-  getBrowser() {
-    return navigator.userAgent;
-  }
+    getBrowser () {
+        return navigator.userAgent;
+    }
 }
 
 module.exports = Scratch3ChatGptBlocks;
