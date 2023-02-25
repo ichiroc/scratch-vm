@@ -51,17 +51,6 @@ class Scratch3ChatGptBlocks {
             blockIconURI: blockIconURI,
             blocks: [
                 {
-                    opcode: 'writeLog',
-                    blockType: BlockType.COMMAND,
-                    text: 'log [TEXT]',
-                    arguments: {
-                        TEXT: {
-                            type: ArgumentType.STRING,
-                            defaultValue: 'hello'
-                        }
-                    }
-                },
-                {
                     opcode: 'ask',
                     blockType: BlockType.REPORTER,
                     text: 'ChatGPTに答えを聞く [TEXT]',
@@ -82,28 +71,12 @@ class Scratch3ChatGptBlocks {
                             defaultValue: 'APIキー'
                         }
                     }
-                },
-                {
-                    opcode: 'getBrowser',
-                    text: 'browser',
-                    blockType: BlockType.REPORTER
                 }
             ],
             menus: {
             }
         };
     }
-
-    /**
-* Write log.
-* @param {object} args - the block arguments.
-* @property {number} TEXT - the text.
-*/
-    writeLog (args) {
-        const text = Cast.toString(args.TEXT);
-        log.log(this.apiKey);
-    }
-
     ask (args){
       if (this.apiKey === 'APIキー' || this.apiKey === ''){
             return 'openai.com のサイトからAPIキーを取得してセットください';
@@ -134,15 +107,6 @@ class Scratch3ChatGptBlocks {
 
     setApiKey (args) {
         this.apiKey = Cast.toString(args.TEXT);
-    }
-
-
-    /**
-* Get the browser.
-* @return {number} - the user agent.
-*/
-    getBrowser () {
-        return navigator.userAgent;
     }
 }
 
