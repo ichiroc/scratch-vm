@@ -124,7 +124,7 @@ class Scratch3ChatGptBlocks {
             frequency_penalty: 0,
             presence_penalty: 0,
         }).then(response => {
-          return(response.data.choices[0].text);
+          return(response.data.choices[0].text.replaceAll("\n", ''));
         }).catch(error => {
           console.log(error);
           return(`失敗しちゃったみたい。理由はこれだよ「${error}」`);
