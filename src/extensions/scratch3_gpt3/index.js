@@ -25,7 +25,7 @@ const menuIconURI = 'data:image/png+xml;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoC
  * @param {Runtime} runtime - the runtime instantiating this block package.
  * @constructor
  */
-class Scratch3ChatGptBlocks {
+class Scratch3Gpt3Blocks {
     apiKey = ''
 
     constructor (runtime) {
@@ -45,15 +45,15 @@ class Scratch3ChatGptBlocks {
 */
     getInfo () {
         return {
-            id: 'chatgpt',
-            name: 'ChatGPT',
+            id: 'gpt3',
+            name: 'GPT3',
             menuIconURI: menuIconURI,
             blockIconURI: blockIconURI,
             blocks: [
                 {
                     opcode: 'ask',
                     blockType: BlockType.REPORTER,
-                    text: 'ChatGPTに答えを聞く [TEXT]',
+                    text: 'GPT3に答えを聞く [TEXT]',
                     arguments: {
                         TEXT: {
                             type: ArgumentType.STRING,
@@ -110,4 +110,4 @@ class Scratch3ChatGptBlocks {
     }
 }
 
-module.exports = Scratch3ChatGptBlocks;
+module.exports = Scratch3Gpt3Blocks;
