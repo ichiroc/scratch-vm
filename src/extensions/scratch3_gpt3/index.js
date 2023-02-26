@@ -53,11 +53,11 @@ class Scratch3Gpt3Blocks {
                 {
                     opcode: 'ask',
                     blockType: BlockType.REPORTER,
-                    text: 'GPT3に答えを聞く [TEXT]',
+                    text: '[TEXT]の回答',
                     arguments: {
                         TEXT: {
                             type: ArgumentType.STRING,
-                            defaultValue: '君の名前は？'
+                            defaultValue: 'Scratchの上達方法は？'
                         }
                     }
                 },
