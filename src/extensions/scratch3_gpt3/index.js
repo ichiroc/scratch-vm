@@ -64,13 +64,7 @@ class Scratch3Gpt3Blocks {
                 {
                     opcode: 'setApiKey',
                     blockType: BlockType.COMMAND,
-                    text: 'APIキーをセット[TEXT]',
-                    arguments: {
-                        TEXT: {
-                            type: ArgumentType.STRING,
-                            defaultValue: 'APIキー'
-                        }
-                    }
+                    text: 'APIキーをセット'
                 }
             ],
             menus: {
@@ -105,8 +99,8 @@ class Scratch3Gpt3Blocks {
       return completionPromise;
     }
 
-    setApiKey (args) {
-        this.apiKey = Cast.toString(args.TEXT);
+    setApiKey () {
+        this.apiKey = window.prompt('OpenAI のAPIキーを入力してください');
     }
 }
 
